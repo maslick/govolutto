@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/shopspring/decimal"
 	"net/http"
+	"strconv"
 )
 
 type BalanceReq struct {
@@ -19,7 +20,6 @@ type RestAPI struct {
 func SetupRouter(service *Service) *gin.Engine {
 	api := RestAPI{*service}
 	router := gin.Default()
-	router.GET("/", api.helloHandler)
 	router.POST("v1/transfer", api.postTransfer)
 	router.GET("v1/:username/balance", api.getBalance)
 	router.GET("health", api.health)
@@ -35,16 +35,10 @@ func (api *RestAPI) postTransfer(c *gin.Context) {
 
 	result := api.service.Transaction.Transfer(req.From, req.To, req.Amount)
 	c.JSON(http.StatusOK, gin.H{
-		"success": result,
+		"success": strconv.FormatBool(result),
 		"from":    req.From,
 		"to":      req.To,
 		"amount":  req.Amount,
-	})
-}
-
-func (api *RestAPI) helloHandler(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"hello": "world",
 	})
 }
 
