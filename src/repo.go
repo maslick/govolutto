@@ -34,12 +34,3 @@ func (it *DummyRepo) findUser(userId string) *Account {
 	}
 	return &account
 }
-
-func NewDummyRepo() *DummyRepo {
-	return &DummyRepo{users: map[string]Account{
-		"donald":  {"donald", NewFromFloat(0), "Donald Duck"},
-		"daisy":   {"daisy", NewFromFloat(100), "Daisy Duck"},
-		"scrooge": {"scrooge", NewFromFloat(10000), "Scrooge McDuck"},
-		"gyro":    {"gyro", NewFromFloat(10000), "Gyro Gearloose"},
-	}}
-}

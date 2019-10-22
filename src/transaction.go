@@ -10,12 +10,6 @@ type Transaction struct {
 	Lock sync.Mutex
 }
 
-func DefaultTransaction(repo *IRepo) ITransaction {
-	var transaction = new(Transaction)
-	transaction.Repo = *repo
-	return transaction
-}
-
 func (it *Transaction) Transfer(from string, to string, amount Decimal) bool {
 	it.Lock.Lock()
 	defer it.Lock.Unlock()

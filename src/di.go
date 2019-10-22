@@ -1,0 +1,37 @@
+package src
+
+import (
+	. "github.com/shopspring/decimal"
+	"sync"
+)
+
+func CreateRepo() IRepo {
+	return &DummyRepo{users: map[string]Account{
+		"donald":  {"donald", NewFromFloat(0), "Donald Duck"},
+		"daisy":   {"daisy", NewFromFloat(100), "Daisy Duck"},
+		"scrooge": {"scrooge", NewFromFloat(10000), "Scrooge McDuck"},
+		"gyro":    {"gyro", NewFromFloat(10000), "Gyro Gearloose"},
+	}}
+}
+
+func CreateTransaction(repo *IRepo) ITransaction {
+	return &Transaction{
+		Repo: *repo,
+		Lock: sync.Mutex{},
+	}
+}
+
+func CreateBalance(repo *IRepo) IBalance {
+	return &Balance{*repo}
+}
+
+func CreateService() *Service {
+	repo := CreateRepo()
+	transaction := CreateTransaction(&repo)
+	balance := CreateBalance(&repo)
+
+	return &Service{
+		Transaction: transaction,
+		Balance:     balance,
+	}
+}

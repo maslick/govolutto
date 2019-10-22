@@ -21,3 +21,8 @@ type Account struct {
 	balance  Decimal
 	fullname string
 }
+
+type Service struct {
+	Transaction ITransaction
+	Balance     IBalance
+}
