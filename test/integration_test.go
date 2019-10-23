@@ -5,10 +5,12 @@ import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/maslick/govolutto/src"
+	"github.com/shopspring/decimal"
 	"github.com/stretchr/testify/assert"
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"sync"
 	"testing"
 )
 
@@ -65,14 +67,7 @@ func TestTransactionEndpoint(t *testing.T) {
 		"success": "true",
 	}
 
-	gson, ok := json.Marshal(reqBody)
-	if ok != nil {
-		panic("could not serialize body")
-	}
-	var buf = bytes.Buffer{}
-	buf.Write(gson)
-
-	w := performRequest(router, "POST", "/v1/transfer", &buf)
+	w := performRequest(router, "POST", "/v1/transfer", str2buf(reqBody))
 	assert.Equal(t, http.StatusOK, w.Code)
 
 	var response map[string]string
@@ -102,4 +97,51 @@ func TestTransactionEndpoint(t *testing.T) {
 	daisyBalance, _ := response["balance"]
 
 	assert.Equal(t, "10100", daisyBalance)
+}
+
+func str2buf(reqBody gin.H) *bytes.Buffer {
+	gson, ok := json.Marshal(reqBody)
+	if ok != nil {
+		panic("could not serialize body")
+	}
+	var buf = bytes.Buffer{}
+	buf.Write(gson)
+	return &buf
+}
+
+func TestConcurrentTransactions(t *testing.T) {
+	var wg sync.WaitGroup
+	var count = 1000
+	var amount = decimal.NewFromFloat(float64(10000.0 / float32(count)))
+	wg.Add(count)
+
+	reqBody := gin.H{
+		"from":   "gyro",
+		"to":     "donald",
+		"amount": amount,
+	}
+
+	for i := 0; i < count; i++ {
+		go func() {
+			w := performRequest(router, "POST", "/v1/transfer", str2buf(reqBody))
+			assert.Equal(t, http.StatusOK, w.Code)
+			wg.Done()
+		}()
+	}
+
+	wg.Wait()
+	w1 := performRequest(router, "GET", "/v1/gyro/balance", nil)
+	w2 := performRequest(router, "GET", "/v1/donald/balance", nil)
+
+	var response1 map[string]string
+	var response2 map[string]string
+
+	_ = json.Unmarshal([]byte(w1.Body.String()), &response1)
+	_ = json.Unmarshal([]byte(w2.Body.String()), &response2)
+
+	balanceFrom, _ := response1["balance"]
+	balanceTo, _ := response2["balance"]
+
+	assert.Equal(t, "0", balanceFrom)
+	assert.Equal(t, "10000", balanceTo)
 }

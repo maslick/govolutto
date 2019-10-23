@@ -14,21 +14,21 @@ func CreateRepo() IRepo {
 	}}
 }
 
-func CreateTransaction(repo *IRepo) ITransaction {
+func CreateTransaction(repo IRepo) ITransaction {
 	return &Transaction{
-		Repo: *repo,
+		Repo: repo,
 		Lock: sync.Mutex{},
 	}
 }
 
-func CreateBalance(repo *IRepo) IBalance {
-	return &Balance{*repo}
+func CreateBalance(repo IRepo) IBalance {
+	return &Balance{repo}
 }
 
 func CreateService() *Service {
 	repo := CreateRepo()
-	transaction := CreateTransaction(&repo)
-	balance := CreateBalance(&repo)
+	transaction := CreateTransaction(repo)
+	balance := CreateBalance(repo)
 
 	return &Service{
 		Transaction: transaction,
