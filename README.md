@@ -22,8 +22,6 @@ go build -ldflags="-s -w" -o govolutto.zip && upx govolutto.zip
 ## API
 * Get balance: ``GET v1/{username}/balance``
 * Transfer money: ``POST v1/transfer``
-* Health endpoint: ``GET /health``
-
 ```json
 {
   "from": "scrooge",
@@ -31,6 +29,7 @@ go build -ldflags="-s -w" -o govolutto.zip && upx govolutto.zip
   "amount": 100.0
 }
 ```
+* Health endpoint: ``GET /health``
 
 ## Usage
 ```zsh
