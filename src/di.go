@@ -2,7 +2,6 @@ package src
 
 import (
 	. "github.com/shopspring/decimal"
-	"sync"
 )
 
 func CreateRepo() DummyRepo {
@@ -15,10 +14,7 @@ func CreateRepo() DummyRepo {
 }
 
 func CreateTransaction(repo IRepo) Transaction {
-	return Transaction{
-		Repo: repo,
-		Lock: sync.Mutex{},
-	}
+	return Transaction{Repo: repo}
 }
 
 func CreateBalance(repo IRepo) Balance {

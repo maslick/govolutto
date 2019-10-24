@@ -7,12 +7,12 @@ import (
 
 type Transaction struct {
 	Repo IRepo
-	Lock sync.Mutex
+	sync.Mutex
 }
 
 func (it *Transaction) Transfer(from string, to string, amount Decimal) bool {
-	it.Lock.Lock()
-	defer it.Lock.Unlock()
+	it.Lock()
+	defer it.Unlock()
 
 	if from == to {
 		return false
