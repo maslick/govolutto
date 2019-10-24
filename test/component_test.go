@@ -10,8 +10,8 @@ import (
 
 func TestDummyTransfer(t *testing.T) {
 	var repo = CreateRepo()
-	var transaction = CreateTransaction(repo)
-	var balance IBalance = &Balance{Repo: repo}
+	var transaction = CreateTransaction(&repo)
+	var balance IBalance = &Balance{Repo: &repo}
 
 	assert.Equal(t, "100", balance.Amount("daisy").String())
 	assert.Equal(t, "0", balance.Amount("donald").String())
@@ -22,14 +22,39 @@ func TestDummyTransfer(t *testing.T) {
 	assert.Equal(t, "50", balance.Amount("donald").String())
 }
 
+func TestInsufficientFundsTransfer(t *testing.T) {
+	var repo = CreateRepo()
+	var transaction = CreateTransaction(&repo)
+	var balance IBalance = &Balance{Repo: &repo}
+
+	result := transaction.Transfer("daisy", "daisy", decimal.NewFromFloat(110))
+
+	assert.Equal(t, "100", balance.Amount("daisy").String())
+	assert.Equal(t, "0", balance.Amount("donald").String())
+	assert.False(t, result)
+}
+
+func TestTransferToMyself(t *testing.T) {
+	var repo = CreateRepo()
+	var transaction = CreateTransaction(&repo)
+	var balance IBalance = &Balance{Repo: &repo}
+
+	result := transaction.Transfer("daisy", "daisy", decimal.NewFromFloat(50))
+
+	assert.Equal(t, "100", balance.Amount("daisy").String())
+	assert.Equal(t, "0", balance.Amount("donald").String())
+	assert.False(t, result)
+}
+
 func TestNegativeTransfer(t *testing.T) {
 	var repo = CreateRepo()
-	var transaction = CreateTransaction(repo)
-	var balance IBalance = &Balance{Repo: repo}
+	var transaction = CreateTransaction(&repo)
+	var balance IBalance = &Balance{Repo: &repo}
 
-	transaction.Transfer("daisy", "donald", decimal.NewFromFloat(-50))
+	result := transaction.Transfer("daisy", "donald", decimal.NewFromFloat(-50))
 	assert.Equal(t, "50", balance.Amount("daisy").String(), "Daisy should have 50")
 	assert.Equal(t, "50", balance.Amount("donald").String(), "Donalnd should have 50")
+	assert.True(t, result)
 }
 
 func TestConcurrentTransfer(t *testing.T) {
@@ -39,8 +64,8 @@ func TestConcurrentTransfer(t *testing.T) {
 	wg.Add(count)
 
 	var repo = CreateRepo()
-	var transaction = CreateTransaction(repo)
-	var balance IBalance = &Balance{Repo: repo}
+	var transaction = CreateTransaction(&repo)
+	var balance IBalance = &Balance{Repo: &repo}
 
 	for i := 0; i < count; i++ {
 		go func() {

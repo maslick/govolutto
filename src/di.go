@@ -5,8 +5,8 @@ import (
 	"sync"
 )
 
-func CreateRepo() IRepo {
-	return &DummyRepo{users: map[string]Account{
+func CreateRepo() DummyRepo {
+	return DummyRepo{users: map[string]Account{
 		"donald":  {"donald", NewFromFloat(0), "Donald Duck"},
 		"daisy":   {"daisy", NewFromFloat(100), "Daisy Duck"},
 		"scrooge": {"scrooge", NewFromFloat(10000), "Scrooge McDuck"},
@@ -14,24 +14,24 @@ func CreateRepo() IRepo {
 	}}
 }
 
-func CreateTransaction(repo IRepo) ITransaction {
-	return &Transaction{
+func CreateTransaction(repo IRepo) Transaction {
+	return Transaction{
 		Repo: repo,
 		Lock: sync.Mutex{},
 	}
 }
 
-func CreateBalance(repo IRepo) IBalance {
-	return &Balance{repo}
+func CreateBalance(repo IRepo) Balance {
+	return Balance{repo}
 }
 
 func CreateService() *Service {
 	repo := CreateRepo()
-	transaction := CreateTransaction(repo)
-	balance := CreateBalance(repo)
+	transaction := CreateTransaction(&repo)
+	balance := CreateBalance(&repo)
 
 	return &Service{
-		Transaction: transaction,
-		Balance:     balance,
+		Transaction: &transaction,
+		Balance:     &balance,
 	}
 }

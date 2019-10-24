@@ -99,14 +99,9 @@ func TestTransactionEndpoint(t *testing.T) {
 	assert.Equal(t, "10100", daisyBalance)
 }
 
-func str2buf(reqBody gin.H) *bytes.Buffer {
-	gson, ok := json.Marshal(reqBody)
-	if ok != nil {
-		panic("could not serialize body")
-	}
-	var buf = bytes.Buffer{}
-	buf.Write(gson)
-	return &buf
+func TestBadRequesDuringTransaction(t *testing.T) {
+	w := performRequest(router, "POST", "/v1/transfer", &bytes.Buffer{})
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
 func TestConcurrentTransactions(t *testing.T) {
@@ -144,4 +139,14 @@ func TestConcurrentTransactions(t *testing.T) {
 
 	assert.Equal(t, "0", balanceFrom)
 	assert.Equal(t, "10000", balanceTo)
+}
+
+func str2buf(reqBody gin.H) *bytes.Buffer {
+	gson, ok := json.Marshal(reqBody)
+	if ok != nil {
+		panic("could not serialize body")
+	}
+	var buf = bytes.Buffer{}
+	buf.Write(gson)
+	return &buf
 }

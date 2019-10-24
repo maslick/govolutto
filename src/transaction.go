@@ -17,8 +17,8 @@ func (it *Transaction) Transfer(from string, to string, amount Decimal) bool {
 	if from == to {
 		return false
 	}
-	if !it.Repo.withdraw(from, amount.Abs()) {
+	if !it.Repo.Withdraw(from, amount.Abs()) {
 		return false
 	}
-	return it.Repo.deposit(to, amount.Abs())
+	return it.Repo.Deposit(to, amount.Abs())
 }

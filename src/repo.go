@@ -10,7 +10,7 @@ type DummyRepo struct {
 	users map[string]Account
 }
 
-func (it *DummyRepo) withdraw(username string, amount Decimal) bool {
+func (it *DummyRepo) Withdraw(username string, amount Decimal) bool {
 	user := it.findUser(username)
 	if amount.GreaterThan(user.balance) {
 		return false
@@ -19,11 +19,11 @@ func (it *DummyRepo) withdraw(username string, amount Decimal) bool {
 	return true
 }
 
-func (it *DummyRepo) deposit(username string, amount Decimal) bool {
-	return it.withdraw(username, amount.Neg())
+func (it *DummyRepo) Deposit(username string, amount Decimal) bool {
+	return it.Withdraw(username, amount.Neg())
 }
 
-func (it *DummyRepo) getBalance(username string) Decimal {
+func (it *DummyRepo) GetBalance(username string) Decimal {
 	return it.findUser(username).balance
 }
 

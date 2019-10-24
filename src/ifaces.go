@@ -11,15 +11,9 @@ type IBalance interface {
 }
 
 type IRepo interface {
-	withdraw(username string, amount Decimal) bool
-	deposit(username string, amount Decimal) bool
-	getBalance(username string) Decimal
-}
-
-type Account struct {
-	username string
-	balance  Decimal
-	fullname string
+	Withdraw(username string, amount Decimal) bool
+	Deposit(username string, amount Decimal) bool
+	GetBalance(username string) Decimal
 }
 
 type Service struct {

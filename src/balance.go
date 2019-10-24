@@ -7,5 +7,5 @@ type Balance struct {
 }
 
 func (it *Balance) Amount(userId string) Decimal {
-	return it.Repo.getBalance(userId)
+	return it.Repo.GetBalance(userId)
 }
