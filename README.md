@@ -20,9 +20,9 @@ go build -ldflags="-s -w" -o govolutto.zip && upx govolutto.zip
 ```
 
 ## API
-* Health endpoint: ``GET /health``
 * Get balance: ``GET v1/{username}/balance``
 * Transfer money: ``POST v1/transfer``
+* Health endpoint: ``GET /health``
 
 ```json
 {
@@ -108,10 +108,10 @@ http http://`docker-machine ip default`:8081/v1/daisy/balance | jq
 
 ## k8s
 ```zsh
-$ k apply -f k8s/deployment.yaml
-$ k get all -l project=govolutto
-$ k port-forward govolutto-api-5b58b69647-877qd 8083:8080
-$ http :8083/health
+kubectl apply -f k8s/deployment.yaml
+kubectl get all -l project=govolutto
+kubectl port-forward govolutto-api-5b58b69647-877qd 8083:8080
+http :8083/health
 ```
 
 ## Links
