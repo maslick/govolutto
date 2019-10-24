@@ -108,7 +108,7 @@ http http://`docker-machine ip default`:8081/v1/daisy/balance | jq
 $ k apply -f k8s/deployment.yaml
 $ k get all -l project=govolutto
 $ k port-forward govolutto-api-5b58b69647-877qd 8083:8080
-$ http :8083/v1/health
+$ http :8083/health
 ```
 
 ## Links
