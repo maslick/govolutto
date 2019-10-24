@@ -99,7 +99,7 @@ func TestTransactionEndpoint(t *testing.T) {
 	assert.Equal(t, "10100", daisyBalance)
 }
 
-func TestBadRequesDuringTransaction(t *testing.T) {
+func TestBadRequestDuringTransaction(t *testing.T) {
 	w := performRequest(router, "POST", "/v1/transfer", &bytes.Buffer{})
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
