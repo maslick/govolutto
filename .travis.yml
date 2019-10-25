@@ -13,7 +13,7 @@ before_install:
 
 script:
   - go test ./... -coverpkg=./... -coverprofile=coverage.txt -covermode=atomic -race -tags test
-  - CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o build/govolutto.zip
+  - CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o build/govolutto.zip && upx build/govolutto.zip
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - docker build -t maslick/govolutto .
 
