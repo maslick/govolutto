@@ -4,13 +4,14 @@ services:
   - docker
 
 before_install:
+  - sudo add-apt-repository universe multiverse
   - sudo apt-get update
   - sudo apt-get install -y upx
   - go get -t -v ./...
 
 script:
   - go test ./... -coverpkg=./... -coverprofile=coverage.txt -covermode=atomic -race -tags test
-  - GOOS=linux go build -ldflags="-s -w" -o build/govolutto.zip && upx build/govolutto.zip && chmod +x build/govolutto.zip
+  - GOOS=linux go build -ldflags="-s -w" -o build/govolutto.zip && upx build/govolutto.zip
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - docker build -t maslick/govolutto .
 
