@@ -6,33 +6,15 @@ services:
 before_install:
   - sudo apt-get update
   - sudo apt-get install -y upx
+  - go get -t -v ./...
 
-stages:
-  - name: init
-  - name: test
-  - name: build
-  - name: docker
 
-jobs:
-  include:
-      - stage: init
-        name: "Init"
-        script:
-          - go get -t -v ./...
-      - stage: test
-        name: "Test"
-        script:
-          - go test ./... -coverpkg=./... -coverprofile=coverage.txt -covermode=atomic -race -tags test
-      - stage: build
-        name: "Build"
-        script:
-          - GOOS=linux go build -ldflags="-s -w" -o build/govolutto.zip && upx build/govolutto.zip
-      - stage: docker
-        name: "Deploy to Docker Hub"
-        script:
-          - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-          - docker build -t maslick/govolutto .
-          - docker push maslick/govolutto
+script:
+  - go test ./... -coverpkg=./... -coverprofile=coverage.txt -covermode=atomic -race -tags test
+  - GOOS=linux go build -ldflags="-s -w" -o build/govolutto.zip && upx build/govolutto.zip
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker build -t maslick/govolutto .
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+  - docker push maslick/govolutto
