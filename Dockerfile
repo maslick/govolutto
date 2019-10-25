@@ -1,4 +1,4 @@
-FROM scratch
+FROM alpine
 
 ADD build/ ./
 ENV PORT 8080
