@@ -15,6 +15,8 @@ Golang version of money transfer REST API ([see link](https://github.com/maslick
 ## Installation
 ```zsh
 go test -v test/*
+go test test/* -bench=. -run=XXX
+
 go build -ldflags="-s -w" -o govolutto
 go build -ldflags="-s -w" -o govolutto.zip && upx govolutto.zip
 ```
