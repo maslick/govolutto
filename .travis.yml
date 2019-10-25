@@ -1,10 +1,10 @@
 language: go
+dist: bionic
 
 services:
   - docker
 
 before_install:
-  - sudo add-apt-repository universe multiverse
   - sudo apt-get update
   - sudo apt-get install -y upx
   - go get -t -v ./...
