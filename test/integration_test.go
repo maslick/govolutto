@@ -29,7 +29,7 @@ func performRequest(r http.Handler, method, path string, body io.Reader) *httpte
 }
 
 func TestHealthEndpoint(t *testing.T) {
-	w := performRequest(router, "GET", "/health", nil)
+	w := performRequest(router, "GET", "/v1/health", nil)
 	assert.Equal(t, http.StatusOK, w.Code)
 }
 
@@ -38,7 +38,7 @@ func TestCheckBalance(t *testing.T) {
 		"username": "daisy",
 		"balance":  "100",
 	}
-	w := performRequest(router, "GET", "/v1/daisy/balance", nil)
+	w := performRequest(router, "GET", "/v1/balance/daisy", nil)
 	assert.Equal(t, http.StatusOK, w.Code)
 
 	var response map[string]string
@@ -90,7 +90,7 @@ func TestTransactionEndpoint(t *testing.T) {
 	assert.Equal(t, respBody["amount"], amountVal)
 	assert.Equal(t, respBody["success"], successVal)
 
-	w = performRequest(router, "GET", "/v1/daisy/balance", nil)
+	w = performRequest(router, "GET", "/v1/balance/daisy", nil)
 	assert.Equal(t, http.StatusOK, w.Code)
 
 	_ = json.Unmarshal([]byte(w.Body.String()), &response)
@@ -125,8 +125,8 @@ func TestConcurrentTransactions(t *testing.T) {
 	}
 
 	wg.Wait()
-	w1 := performRequest(router, "GET", "/v1/gyro/balance", nil)
-	w2 := performRequest(router, "GET", "/v1/donald/balance", nil)
+	w1 := performRequest(router, "GET", "/v1/balance/gyro", nil)
+	w2 := performRequest(router, "GET", "/v1/balance/donald", nil)
 
 	var response1 map[string]string
 	var response2 map[string]string

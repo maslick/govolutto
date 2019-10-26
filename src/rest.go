@@ -1,6 +1,7 @@
 package src
 
 import (
+	"github.com/gin-contrib/expvar"
 	"github.com/gin-gonic/gin"
 	"github.com/shopspring/decimal"
 	"net/http"
@@ -20,9 +21,10 @@ type RestAPI struct {
 func SetupRouter(service *Service) *gin.Engine {
 	api := RestAPI{*service}
 	router := gin.Default()
+	router.GET("v1/balance/:username", api.getBalance)
+	router.GET("v1/health", api.health)
+	router.GET("v1/metrics", expvar.Handler())
 	router.POST("v1/transfer", api.postTransfer)
-	router.GET("v1/:username/balance", api.getBalance)
-	router.GET("health", api.health)
 	return router
 }
 

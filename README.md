@@ -22,8 +22,8 @@ go build -ldflags="-s -w" -o govolutto.zip && upx govolutto.zip
 ```
 
 ## API
-* Get balance: ``GET v1/{username}/balance``
-* Transfer money: ``POST v1/transfer``
+* Get balance: ``GET /v1/balance/{username}``
+* Transfer money: ``POST /v1/transfer``
 ```json
 {
   "from": "scrooge",
@@ -31,20 +31,21 @@ go build -ldflags="-s -w" -o govolutto.zip && upx govolutto.zip
   "amount": 100.0
 }
 ```
-* Health endpoint: ``GET /health``
+* Health endpoint: ``GET /v1/health``
+* Metrics endpoint: ``GET /v1/metrics``
 
 ## Usage
 ```zsh
 ./govolutto
 ./govolutto.zip
 
-http :8080/v1/daisy/balance | jq
+http :8080/v1/balance/daisy | jq
 {
   "balance": "100",
   "username": "daisy"
 }
 
-http :8080/v1/scrooge/balance | jq
+http :8080/v1/balance/scrooge | jq
 {
   "balance": "10000",
   "username": "scrooge"
@@ -100,7 +101,7 @@ GOOS=linux go build -ldflags="-s -w" -o build/govolutto.zip && upx build/govolut
 docker build -t maslick/govolutto .
 docker run -d -p 8081:8080 maslick/govolutto
 
-http http://`docker-machine ip default`:8081/v1/daisy/balance | jq
+http http://`docker-machine ip default`:8081/v1/balance/daisy | jq
 {
   "balance": "100",
   "username": "daisy"
@@ -112,7 +113,7 @@ http http://`docker-machine ip default`:8081/v1/daisy/balance | jq
 kubectl apply -f k8s/deployment.yaml
 kubectl get all -l project=govolutto
 kubectl port-forward govolutto-api-5b58b69647-877qd 8083:8080
-http :8083/health
+http :8083/v1/health
 ```
 
 ## Links

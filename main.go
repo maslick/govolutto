@@ -10,6 +10,7 @@ import (
 
 func init() {
 	gin.SetMode(gin.ReleaseMode)
+	go NewMetrics(5)
 }
 
 func main() {
