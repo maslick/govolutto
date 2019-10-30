@@ -1,11 +1,14 @@
+//+build wireinject
+
 package src
 
 import (
+	"github.com/google/wire"
 	. "github.com/shopspring/decimal"
 )
 
-func CreateRepo() DummyRepo {
-	return DummyRepo{users: map[string]Account{
+func RepoProducer() IRepo {
+	return &DummyRepo{users: map[string]Account{
 		"donald":  {"donald", NewFromFloat(0), "Donald Duck"},
 		"daisy":   {"daisy", NewFromFloat(100), "Daisy Duck"},
 		"scrooge": {"scrooge", NewFromFloat(10000), "Scrooge McDuck"},
@@ -13,21 +16,19 @@ func CreateRepo() DummyRepo {
 	}}
 }
 
-func CreateTransaction(repo IRepo) Transaction {
+func TransactionProducer(repo IRepo) Transaction {
 	return Transaction{Repo: repo}
 }
 
-func CreateBalance(repo IRepo) Balance {
+func BalanceProducer(repo IRepo) Balance {
 	return Balance{repo}
 }
 
-func CreateService() *Service {
-	repo := CreateRepo()
-	transaction := CreateTransaction(&repo)
-	balance := CreateBalance(&repo)
+func ServiceProducer(transaction Transaction, balance Balance) *Service {
+	return &Service{&transaction, &balance}
+}
 
-	return &Service{
-		Transaction: &transaction,
-		Balance:     &balance,
-	}
+func CreateService() *Service {
+	wire.Build(RepoProducer, TransactionProducer, BalanceProducer, ServiceProducer)
+	return &Service{}
 }

@@ -16,13 +16,13 @@ func (repo *falseWithdrawalRepo) GetBalance(username string) decimal.Decimal {
 }
 
 func TestFalseWithdrawal(t *testing.T) {
-	var transaction = CreateTransaction(&falseWithdrawalRepo{})
+	var transaction = TransactionProducer(&falseWithdrawalRepo{})
 	result := transaction.Transfer("daisy", "donald", decimal.NewFromFloat(-50))
 	assert.False(t, result)
 }
 
 func TestWithdrawalAmount(t *testing.T) {
-	var repo = CreateRepo()
+	var repo = RepoProducer()
 	result := repo.Withdraw("donald", decimal.NewFromFloat(50))
 	assert.False(t, result)
 }
@@ -35,7 +35,7 @@ func TestUserNotExist(t *testing.T) {
 			}
 		}()
 
-		var repo = CreateRepo()
+		var repo = RepoProducer()
 		repo.GetBalance("helloworld")
 	}()
 }
