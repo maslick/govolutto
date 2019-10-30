@@ -12,6 +12,7 @@ before_install:
 
 install:
   - go mod download
+  - go get github.com/google/wire
 
 script:
   - cd src && $GOPATH/bin/wire && cd ..
