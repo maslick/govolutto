@@ -9,10 +9,13 @@ services:
 before_install:
   - sudo apt-get update
   - sudo apt-get install -y upx
+
+install:
+  - go mod download
   - go get github.com/google/wire/cmd/wire
 
 script:
-  - cd src && wire && cd ..
+  - wire ./src
   - go test ./... -coverpkg=./... -coverprofile=coverage.txt -covermode=atomic -race -tags test
   - CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o build/govolutto.zip && upx build/govolutto.zip
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
