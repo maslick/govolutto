@@ -16,16 +16,16 @@ func RepoProducer() IRepo {
 	}}
 }
 
-func TransactionProducer(repo IRepo) Transaction {
-	return Transaction{Repo: repo}
+func TransactionProducer(repo IRepo) ITransaction {
+	return &Transaction{Repo: repo}
 }
 
-func BalanceProducer(repo IRepo) Balance {
-	return Balance{repo}
+func BalanceProducer(repo IRepo) IBalance {
+	return &Balance{repo}
 }
 
-func ServiceProducer(transaction Transaction, balance Balance) *Service {
-	return &Service{&transaction, &balance}
+func ServiceProducer(transaction ITransaction, balance IBalance) *Service {
+	return &Service{transaction, balance}
 }
 
 func CreateService() *Service {
