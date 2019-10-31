@@ -15,12 +15,17 @@ spec:
     project: govolutto
     app: govolutto-api
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: govolutto-api
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      maintainer: maslick
+      project: govolutto
+      app: govolutto-api
   template:
     metadata:
       name: govolutto-api
