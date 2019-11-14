@@ -61,7 +61,7 @@ spec:
                     sh "go get github.com/google/wire/cmd/wire"
                     sh "wire ./src"
                     sh "go test ./test -coverpkg=./... -coverprofile=coverage.txt -covermode=atomic -race -tags test"
-                    sh "CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o build/govolutto.zip"
+                    sh "CGO_ENABLED=0 GOOS=linux go build -ldflags=\"-s -w\" -o build/govolutto.zip"
                 }
             }
         }
