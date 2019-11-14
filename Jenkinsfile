@@ -75,7 +75,7 @@ spec:
         stage ('publish artifact') {
             when {
                 expression {
-                    branch == 'di'
+                    branch == 'master'
                 }
             }
             steps {
