@@ -7,8 +7,8 @@ import (
 )
 
 func BenchmarkTransaction(b *testing.B) {
-	var repo = CreateRepo()
-	var transaction = CreateTransaction(&repo)
+	var repo = RepoProducer()
+	var transaction = TransactionProducer(repo)
 
 	for n := 0; n < b.N; n++ {
 		transaction.Transfer("scrooge", "donald", decimal.NewFromFloat(1))
@@ -16,8 +16,8 @@ func BenchmarkTransaction(b *testing.B) {
 }
 
 func BenchmarkBalanceCheck(b *testing.B) {
-	var repo = CreateRepo()
-	var balance IBalance = &Balance{Repo: &repo}
+	var repo = RepoProducer()
+	var balance IBalance = &Balance{Repo: repo}
 
 	for n := 0; n < b.N; n++ {
 		balance.Amount("scrooge")

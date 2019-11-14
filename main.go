@@ -14,6 +14,5 @@ func init() {
 }
 
 func main() {
-	var service = CreateService()
-	log.Fatal(SetupRouter(service).Run())
+	log.Fatal(SetupRouter(CreateService()).Run())
 }

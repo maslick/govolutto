@@ -9,9 +9,9 @@ import (
 )
 
 func TestDummyTransfer(t *testing.T) {
-	var repo = CreateRepo()
-	var transaction = CreateTransaction(&repo)
-	var balance IBalance = &Balance{Repo: &repo}
+	var repo = RepoProducer()
+	var transaction = TransactionProducer(repo)
+	var balance IBalance = &Balance{Repo: repo}
 
 	assert.Equal(t, "100", balance.Amount("daisy").String())
 	assert.Equal(t, "0", balance.Amount("donald").String())
@@ -23,9 +23,9 @@ func TestDummyTransfer(t *testing.T) {
 }
 
 func TestInsufficientFundsTransfer(t *testing.T) {
-	var repo = CreateRepo()
-	var transaction = CreateTransaction(&repo)
-	var balance IBalance = &Balance{Repo: &repo}
+	var repo = RepoProducer()
+	var transaction = TransactionProducer(repo)
+	var balance IBalance = &Balance{Repo: repo}
 
 	result := transaction.Transfer("daisy", "daisy", decimal.NewFromFloat(110))
 
@@ -35,9 +35,9 @@ func TestInsufficientFundsTransfer(t *testing.T) {
 }
 
 func TestTransferToMyself(t *testing.T) {
-	var repo = CreateRepo()
-	var transaction = CreateTransaction(&repo)
-	var balance IBalance = &Balance{Repo: &repo}
+	var repo = RepoProducer()
+	var transaction = TransactionProducer(repo)
+	var balance IBalance = &Balance{Repo: repo}
 
 	result := transaction.Transfer("daisy", "daisy", decimal.NewFromFloat(50))
 
@@ -47,9 +47,9 @@ func TestTransferToMyself(t *testing.T) {
 }
 
 func TestNegativeTransfer(t *testing.T) {
-	var repo = CreateRepo()
-	var transaction = CreateTransaction(&repo)
-	var balance IBalance = &Balance{Repo: &repo}
+	var repo = RepoProducer()
+	var transaction = TransactionProducer(repo)
+	var balance IBalance = &Balance{Repo: repo}
 
 	result := transaction.Transfer("daisy", "donald", decimal.NewFromFloat(-50))
 	assert.Equal(t, "50", balance.Amount("daisy").String(), "Daisy should have 50")
@@ -63,9 +63,9 @@ func TestConcurrentTransfer(t *testing.T) {
 	var amount = decimal.NewFromFloat(float64(100.0 / float32(count)))
 	wg.Add(count)
 
-	var repo = CreateRepo()
-	var transaction = CreateTransaction(&repo)
-	var balance IBalance = &Balance{Repo: &repo}
+	var repo = RepoProducer()
+	var transaction = TransactionProducer(repo)
+	var balance IBalance = &Balance{Repo: repo}
 
 	for i := 0; i < count; i++ {
 		go func() {

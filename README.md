@@ -1,7 +1,7 @@
 # =govolutto=
 Golang version of money transfer REST API ([see link](https://github.com/maslick/revolutto))
 
-[![Build Status](https://travis-ci.org/maslick/govolutto.svg?branch=master)](https://travis-ci.org/maslick/govolutto)
+[![Build Status](https://travis-ci.org/maslick/govolutto.svg?branch=di)](https://travis-ci.org/maslick/govolutto)
 [![image size](https://img.shields.io/badge/image%20size-4MB-blue.svg)](https://cloud.docker.com/u/maslick/repository/docker/maslick/govolutto)
 [![Maintainability](https://api.codeclimate.com/v1/badges/e189c55d25e618f34704/maintainability)](https://codeclimate.com/github/maslick/govolutto/maintainability)
 [![codecov](https://codecov.io/gh/maslick/govolutto/branch/master/graph/badge.svg)](https://codecov.io/gh/maslick/govolutto)
@@ -14,8 +14,11 @@ Golang version of money transfer REST API ([see link](https://github.com/maslick
 
 ## Installation
 ```zsh
-go test -v test/*
-go test test/* -bench=. -run=XXX
+go get github.com/google/wire/cmd/wire
+wire ./src
+
+go test -v ./test
+go test ./test -bench=. -run=XXX
 
 go build -ldflags="-s -w" -o govolutto
 go build -ldflags="-s -w" -o govolutto.zip && upx govolutto.zip
@@ -97,6 +100,7 @@ Bucket           #     %       Histogram
 * Lightweight Docker image (4.5MB)
 * See [Dockerfile](Dockerfile)
 ```zsh
+wire ./src
 GOOS=linux go build -ldflags="-s -w" -o build/govolutto.zip && upx build/govolutto.zip
 docker build -t maslick/govolutto .
 docker run -d -p 8081:8080 maslick/govolutto
