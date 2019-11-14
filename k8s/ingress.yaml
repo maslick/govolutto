@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: k8s-govolutto
+  labels:
+    maintainer: maslick
+    project: govolutto
+    app: govolutto-api
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: govolutto.maslick.ru
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: govolutto-api
+              servicePort: 80
