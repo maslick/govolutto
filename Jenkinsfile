@@ -65,7 +65,7 @@ spec:
                 }
             }
         }
-        stage ('build') {
+        stage ('dockerize') {
             steps {
                 container('docker') {
                     sh "docker build . -t ${imageName}:${revision} --build-arg REVISION=${revision}"
