@@ -1,7 +1,7 @@
 # =govolutto=
 Golang version of money transfer REST API ([see link](https://github.com/maslick/revolutto))
 
-[![Build Status](https://travis-ci.org/maslick/govolutto.svg?branch=di)](https://travis-ci.org/maslick/govolutto)
+[![Build Status](https://travis-ci.org/maslick/govolutto.svg)](https://travis-ci.org/maslick/govolutto)
 [![image size](https://img.shields.io/badge/image%20size-4MB-blue.svg)](https://cloud.docker.com/u/maslick/repository/docker/maslick/govolutto)
 [![Maintainability](https://api.codeclimate.com/v1/badges/e189c55d25e618f34704/maintainability)](https://codeclimate.com/github/maslick/govolutto/maintainability)
 [![codecov](https://codecov.io/gh/maslick/govolutto/branch/master/graph/badge.svg)](https://codecov.io/gh/maslick/govolutto)
