@@ -3,17 +3,24 @@
 package src
 
 import (
-	"expvar"
-	_ "expvar"
+	"github.com/prometheus/client_golang/prometheus"
 	"runtime"
 	"time"
 )
 
-func NewMetrics(duration int) {
-	var interval = time.Duration(duration) * time.Second
-	var goroutines = expvar.NewInt("num_goroutine")
+func init() {
+	goroutinesMetric := prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "goroutines_number",
+		Help: "Number of goroutines",
+	})
+	go goroutineMetricHandler(goroutinesMetric)
+	prometheus.MustRegister(goroutinesMetric)
+}
+
+func goroutineMetricHandler(gauge prometheus.Gauge) {
+	var interval = time.Duration(5) * time.Second
 	for {
 		<-time.After(interval)
-		goroutines.Set(int64(runtime.NumGoroutine()))
+		gauge.Set(float64(runtime.NumGoroutine()))
 	}
 }

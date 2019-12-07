@@ -1,8 +1,8 @@
 package src
 
 import (
-	"github.com/gin-contrib/expvar"
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/shopspring/decimal"
 	"net/http"
 	"strconv"
@@ -23,7 +23,7 @@ func SetupRouter(service *Service) *gin.Engine {
 	router := gin.Default()
 	router.GET("v1/balance/:username", api.getBalance)
 	router.GET("v1/health", api.health)
-	router.GET("v1/metrics", expvar.Handler())
+	router.GET("v1/metrics", gin.WrapH(promhttp.Handler()))
 	router.POST("v1/transfer", api.postTransfer)
 	return router
 }
