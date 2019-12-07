@@ -10,7 +10,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-    - host: govolutto.maslick.ru
+    - host: govolutto.134-209-238-173.nip.io
       http:
         paths:
           - path: /
