@@ -39,8 +39,8 @@ go build -ldflags="-s -w" -o govolutto.zip && upx govolutto.zip
 
 ## Usage
 ```zsh
-./govolutto
-./govolutto.zip
+GIN_MODE=debug ./govolutto
+GIN_MODE=release ./govolutto.zip
 
 http :8080/v1/balance/daisy | jq
 {
