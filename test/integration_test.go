@@ -23,7 +23,7 @@ func init() {
 }
 
 func TestHealthEndpoint(t *testing.T) {
-	w := performRequest(router, "GET", "/v1/health", nil)
+	w := performRequest("GET", "/v1/health", nil)
 	assert.Equal(t, http.StatusOK, w.Code)
 }
 
@@ -32,7 +32,7 @@ func TestCheckBalance(t *testing.T) {
 		"username": "daisy",
 		"balance":  "100",
 	}
-	w := performRequest(router, "GET", "/v1/balance/daisy", nil)
+	w := performRequest("GET", "/v1/balance/daisy", nil)
 	assert.Equal(t, http.StatusOK, w.Code)
 
 	var response map[string]string
@@ -61,7 +61,7 @@ func TestTransactionEndpoint(t *testing.T) {
 		"success": "true",
 	}
 
-	w := performRequest(router, "POST", "/v1/transfer", str2buf(reqBody))
+	w := performRequest("POST", "/v1/transfer", str2buf(reqBody))
 	assert.Equal(t, http.StatusOK, w.Code)
 
 	var response map[string]string
@@ -84,7 +84,7 @@ func TestTransactionEndpoint(t *testing.T) {
 	assert.Equal(t, respBody["amount"], amountVal)
 	assert.Equal(t, respBody["success"], successVal)
 
-	w = performRequest(router, "GET", "/v1/balance/daisy", nil)
+	w = performRequest("GET", "/v1/balance/daisy", nil)
 	assert.Equal(t, http.StatusOK, w.Code)
 
 	_ = json.Unmarshal([]byte(w.Body.String()), &response)
@@ -94,7 +94,7 @@ func TestTransactionEndpoint(t *testing.T) {
 }
 
 func TestBadRequestDuringTransaction(t *testing.T) {
-	w := performRequest(router, "POST", "/v1/transfer", &bytes.Buffer{})
+	w := performRequest("POST", "/v1/transfer", &bytes.Buffer{})
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
@@ -112,15 +112,15 @@ func TestConcurrentTransactions(t *testing.T) {
 
 	for i := 0; i < count; i++ {
 		go func() {
-			w := performRequest(router, "POST", "/v1/transfer", str2buf(reqBody))
+			w := performRequest("POST", "/v1/transfer", str2buf(reqBody))
 			assert.Equal(t, http.StatusOK, w.Code)
 			wg.Done()
 		}()
 	}
 
 	wg.Wait()
-	w1 := performRequest(router, "GET", "/v1/balance/gyro", nil)
-	w2 := performRequest(router, "GET", "/v1/balance/donald", nil)
+	w1 := performRequest("GET", "/v1/balance/gyro", nil)
+	w2 := performRequest("GET", "/v1/balance/donald", nil)
 
 	var response1 map[string]string
 	var response2 map[string]string
@@ -135,10 +135,10 @@ func TestConcurrentTransactions(t *testing.T) {
 	assert.Equal(t, "10000", balanceTo)
 }
 
-func performRequest(r http.Handler, method, path string, body io.Reader) *httptest.ResponseRecorder {
+func performRequest(method, path string, body io.Reader) *httptest.ResponseRecorder {
 	req, _ := http.NewRequest(method, path, body)
 	w := httptest.NewRecorder()
-	r.ServeHTTP(w, req)
+	router.ServeHTTP(w, req)
 	return w
 }
 
