@@ -18,14 +18,8 @@ var router *gin.Engine
 
 func init() {
 	gin.SetMode(gin.ReleaseMode)
-	router = src.SetupRouter(src.CreateService())
-}
-
-func performRequest(r http.Handler, method, path string, body io.Reader) *httptest.ResponseRecorder {
-	req, _ := http.NewRequest(method, path, body)
-	w := httptest.NewRecorder()
-	r.ServeHTTP(w, req)
-	return w
+	var testServer = src.RestAPI{Service: *src.CreateService()}
+	router = testServer.InitRouter()
 }
 
 func TestHealthEndpoint(t *testing.T) {
@@ -139,6 +133,13 @@ func TestConcurrentTransactions(t *testing.T) {
 
 	assert.Equal(t, "0", balanceFrom)
 	assert.Equal(t, "10000", balanceTo)
+}
+
+func performRequest(r http.Handler, method, path string, body io.Reader) *httptest.ResponseRecorder {
+	req, _ := http.NewRequest(method, path, body)
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+	return w
 }
 
 func str2buf(reqBody gin.H) *bytes.Buffer {

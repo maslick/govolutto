@@ -4,9 +4,9 @@ package main
 
 import (
 	. "github.com/maslick/govolutto/src"
-	"log"
 )
 
 func main() {
-	log.Fatal(SetupRouter(CreateService()).Run())
+	api := RestAPI{Service: *CreateService()}
+	api.Start()
 }
