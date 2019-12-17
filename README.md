@@ -112,12 +112,25 @@ http http://`docker-machine ip default`:8081/v1/balance/daisy | jq
 }
 ```
 
-## k8s
+## Kubernetes
 ```zsh
 kubectl apply -f k8s/deployment.yaml
 kubectl get all -l project=govolutto
 kubectl port-forward govolutto-api-5b58b69647-877qd 8083:8080
 http :8083/v1/health
+```
+
+## Heroku
+```zsh
+$ git clone https://github.com/maslick/govolutto.git
+$ cd govolutto
+
+$ export HEROKU_APP_NAME=hello-world-app
+$ heroku login
+$ heroku create $HEROKU_APP_NAME
+$ git push heroku master
+$ heroku config:set GIN_MODE=release
+$ open https://$HEROKU_APP_NAME.herokuapp.com/v1/health
 ```
 
 ## Links
