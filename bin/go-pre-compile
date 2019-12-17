@@ -1,0 +1,4 @@
+#!/bin/bash
+
+go get github.com/google/wire/cmd/wire
+bin/wire ./src

@@ -9,3 +9,5 @@ require (
 	github.com/shopspring/decimal v0.0.0-20191009025716-f1972eb1d1f5
 	github.com/stretchr/testify v1.4.0
 )
+
+// +heroku goVersion go1.13
